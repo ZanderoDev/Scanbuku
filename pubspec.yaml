@@ -1,0 +1,23 @@
+name: book_scanner_app
+description: Scan barcode buku sekolah untuk cek info buku (barcode -> judul), biar ga ketuker.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+  flutter: '>=3.44.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  mobile_scanner: ^7.2.0
+  sqflite: ^2.4.3
+  path: ^1.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true

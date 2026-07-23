@@ -1,0 +1,41 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v7
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.44.7
+
+      - name: Generate Android platform folder
+        run: flutter create --platforms=android .
+
+      - name: Add camera permission to AndroidManifest
+        run: |
+          MANIFEST=android/app/src/main/AndroidManifest.xml
+          if ! grep -q 'android.permission.CAMERA' "$MANIFEST"; then
+            sed -i '/<application/i\    <uses-permission android:name="android.permission.CAMERA" />' "$MANIFEST"
+          fi
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK (release)
+        run: flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
